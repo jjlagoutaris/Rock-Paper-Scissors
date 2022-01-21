@@ -6,6 +6,8 @@
 // Check if score has hit victory threshold
 // If so, end game. If not, repeat above steps.
 
+let playerScore = 0, compScore = 0;
+
 function computerPlay(){
     let number = Math.floor(Math.random() * 3) + 1;
     switch(number){
@@ -16,8 +18,8 @@ function computerPlay(){
         case 3:
             return 'scissors';
         default:
-            return 'Error';
             console.log('Something is wrong in playerSelection() function');
+            return 'Error';
     }
 }
 
@@ -39,29 +41,45 @@ function round(playerMove, computerMove){
     }
     else if ((playerMove === 'rock' && computerMove === 'scissors')){
         console.log("You win! Rock beats Scissors");
+        playerScore += 1;
     }
     else if ((playerMove === 'rock' && computerMove === 'paper')){
         console.log("You lose! Paper beats Rock");
+        compScore += 1;
     }
     else if ((playerMove === 'paper' && computerMove === 'scissors')){
         console.log("You lose! Scissors beats Paper");
+        compScore += 1;
     }
     else if ((playerMove === 'paper' && computerMove === 'rock')){
         console.log("You win! Paper beats Rock");
+        playerScore += 1;
     }
     else if ((playerMove === 'scissors' && computerMove === 'rock')){
         console.log("You lose! Rock beats Scissors");
+        compScore += 1;
     }
     else if ((playerMove === 'scissors' && computerMove === 'paper')){
         console.log("You win! Scissors beats Paper");
+        playerScore += 1;
     }
     else{
         console.log("Error");
     } 
 }
 
-// function gameLoop(){
+function gameLoop(){
+    
+    while (playerScore < 5 && compScore < 5){
+        round(playerSelection(), computerPlay());
+        console.log(`Player: ${playerScore} Computer: ${compScore}`)
+    }
+    if (playerScore === 5){
+        console.log("Congratulations - you win!");
+    }
+    else{
+        console.log("Hold this L.");
+    }
+}
 
-// }
-
-// round(playerSelection(), computerPlay());
+gameLoop();
