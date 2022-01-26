@@ -10,7 +10,7 @@ let playerScore = 0;
 let compScore = 0;
 
 const body = document.querySelector('body');
-body.style.cssText = 'height: 100%; background-color: #4f4f4f';
+body.style.cssText = 'height: 100%; background-color: #4f4f4f; background-image: url("background.jpg"); background-size: cover';
 const buttonsDiv = document.createElement('div');
 const rockBtn = document.createElement('button');
 const scissorsBtn = document.createElement('button');
