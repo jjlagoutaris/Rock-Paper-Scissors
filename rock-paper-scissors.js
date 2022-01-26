@@ -6,7 +6,8 @@
 // Check if score has hit victory threshold
 // If so, end game. If not, repeat above steps.
 
-let playerScore = 0, compScore = 0;
+let playerScore = 0; 
+let compScore = 0;
 
 const body = document.querySelector('body');
 body.style.cssText = 'height: 100%; background-color: #4f4f4f';
@@ -37,12 +38,13 @@ buttonsDiv.appendChild(scissorsBtn);
 body.appendChild(buttonsDiv);
 
 const buttons = Array.from(document.querySelectorAll('.button'));
-buttons.forEach(button => button.addEventListener('click', buttonClicked));
+buttons.forEach(button => button.addEventListener('click', round));
 
 const scoreboard = document.createElement('div');
 scoreboard.className = 'scoreboard';
-scoreboard.style.cssText = 'display: flex; width: 100%; justify-content: space-evenly; \
-font-size: 24px; font-family: helvetica; margin-top: 50px';
+scoreboard.style.cssText = 'display: flex; width: 100%; height: 150px;\
+justify-content: space-around; align-items: center; font-size: 24px;\
+font-family: helvetica; margin-top: 50px';
 const playerScoreLabel = document.createElement('div');
 playerScoreLabel.className = 'score';
 playerScoreLabel.style.cssText = 'background-color: #6C63FF; width: 150px; text-align: center; \
@@ -52,10 +54,15 @@ computerScoreLabel.className = 'score';
 computerScoreLabel.style.cssText = 'background-color: #00BFA6; width: 150px; text-align: center; \
 padding: 10px'
 
-playerScoreLabel.textContent = "Player: " + playerScore;
-computerScoreLabel.textContent = "Computer: " + compScore; 
+playerScoreLabel.textContent = "Player: " + String(playerScore);
+computerScoreLabel.textContent = "Computer: " + String(compScore); 
+
+const roundResult = document.createElement('p');
+roundResult.style.cssText = 'width: 200px; text-align: center; justify-content:\
+center; padding: 10px';
 
 scoreboard.appendChild(playerScoreLabel);
+scoreboard.appendChild(roundResult);
 scoreboard.appendChild(computerScoreLabel);
 body.appendChild(scoreboard);
 
@@ -70,65 +77,65 @@ function computerPlay(){
             return 'paper';
         case 3:
             return 'scissors';
-        default:
-            console.log('Something is wrong in playerSelection() function');
-            return 'Error';
     }
 }
 
-function buttonClicked(e){
-    round((e.target.textContent.toLowerCase()), computerPlay());
-}
+function round(e){
+    let playerMove = e.target.textContent.toLowerCase();
+    let computerMove = computerPlay();
 
-function round(playerMove, computerMove){
-    if ((playerMove === 'rock' && computerMove === 'rock') || (playerMove === 'paper' && computerMove === 'paper') || 
-    (playerMove === 'scissors' && computerMove === 'scissors')){
-        console.log("Draw!");
+    if (playerMove === computerMove){
+        roundResult.textContent = 'Draw!';
     }
     else if ((playerMove === 'rock' && computerMove === 'scissors')){
-        console.log("You win! Rock beats Scissors");
-        playerScore += 1;
+        roundResult.textContent = 'You win! Rock beats Scissors.';
+        playerScore++;
+        updateScore();
     }
     else if ((playerMove === 'rock' && computerMove === 'paper')){
-        console.log("You lose! Paper beats Rock");
-        compScore += 1;
+        roundResult.textContent = 'You lose! Paper beats Rock.';
+        compScore++;
+        updateScore();
     }
     else if ((playerMove === 'paper' && computerMove === 'scissors')){
-        console.log("You lose! Scissors beats Paper");
-        compScore += 1;
+        roundResult.textContent = "You lose! Scissors beats Paper.";
+        compScore++;
+        updateScore();
     }
     else if ((playerMove === 'paper' && computerMove === 'rock')){
-        console.log("You win! Paper beats Rock");
-        playerScore += 1;
+        roundResult.textContent = "You win! Paper beats Rock.";
+        playerScore++;
+        updateScore();
     }
     else if ((playerMove === 'scissors' && computerMove === 'rock')){
-        console.log("You lose! Rock beats Scissors");
-        compScore += 1;
+        roundResult.textContent = "You lose! Rock beats Scissors.";
+        compScore++;
+        updateScore();
     }
     else if ((playerMove === 'scissors' && computerMove === 'paper')){
-        console.log("You win! Scissors beats Paper");
-        playerScore += 1;
+        roundResult.textContent = "You win! Scissors beats Paper.";
+        playerScore++;
+        updateScore();
     }
     else{
-        console.log("Error");
+        roundResult.textContent = "Error";
+        updateScore();
     } 
 }
 
-function gameLoop(){
-
-    round(playerSelection(), computerPlay());
-    console.log(`Player: ${playerScore} Computer: ${compScore}`)
-    
-    // while (playerScore < 5 && compScore < 5){
-    //     round(playerSelection(), computerPlay());
-    //     console.log(`Player: ${playerScore} Computer: ${compScore}`)
-    // }
-    // if (playerScore === 5){
-    //     console.log("Congratulations - you win!");
-    // }
-    // else{
-    //     console.log("Hold this L.");
-    // }
+function updateScore(){
+    playerScoreLabel.textContent = "Player: " + String(playerScore);
+    computerScoreLabel.textContent = "Computer: " + String(compScore);
+    gameManagement(); 
 }
 
-// gameLoop();
+function gameManagement(){
+    if (playerScore >= 5){
+        roundResult.textContent = "You won!";
+        playerScore = 0, compScore = 0;
+    }
+    else if (compScore >= 5){
+        roundResult.textContent = "Hold this L!";
+        playerScore = 0, compScore = 0;
+    }
+}
